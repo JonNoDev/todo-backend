@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import uk.co.powdr.dto.ApiError;
 import uk.co.powdr.exception.AccessLevelException;
+import uk.co.powdr.exception.DuplicateAccountException;
 import uk.co.powdr.exception.IncorrectPasswordException;
 import uk.co.powdr.exception.ResourceNotFoundException;
 
@@ -17,6 +18,13 @@ public class ControllerAdvice {
     public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex) {
         ApiError apiError = new ApiError().status(HttpStatus.NOT_FOUND).message(ex.getMessage());
         log.warn("Handler for ResourceNotFoundException triggered with message: {}", ex.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
+
+    @ExceptionHandler(DuplicateAccountException.class)
+    public ResponseEntity<ApiError> handleDuplicateAccount(DuplicateAccountException ex) {
+        ApiError apiError = new ApiError().status(HttpStatus.CONFLICT).message(ex.getMessage());
+        log.warn("Handler for DuplicateAccountException triggered with message: {}", ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 
