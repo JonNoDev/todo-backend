@@ -25,5 +25,5 @@ app:
   secret: ${TODO_SECRET}
   cors:
     origin: ${CORS_ORIGIN}
-  publicPaths: /actuator/health, /api/auth/**
+  publicPaths: /actuator/health, /api/auth/**, /swagger-ui.html, /swagger-ui/**, /v3/api-docs/**
   adminPassword: test
