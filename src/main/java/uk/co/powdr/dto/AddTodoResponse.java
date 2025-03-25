@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AuthResponse {
+public class AddTodoResponse {
 
-    private String token;
+    private Long todoAdded;
 }

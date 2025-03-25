@@ -28,9 +28,9 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful authentication",
                     content = @Content(schema = @Schema(implementation = AuthResponse.class))),
-            @ApiResponse(responseCode = "404", description = "User not found",
-                    content = @Content),
             @ApiResponse(responseCode = "401", description = "Invalid credentials",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content)
     })
     @PostMapping("/authenticate")
@@ -40,7 +40,7 @@ public class AuthController {
 
     @Operation(summary = "Register user and return a JWT token")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful authentication",
+            @ApiResponse(responseCode = "200", description = "Successful registration",
                     content = @Content(schema = @Schema(implementation = AuthResponse.class))),
             @ApiResponse(responseCode = "409", description = "User already exists",
                     content = @Content)
