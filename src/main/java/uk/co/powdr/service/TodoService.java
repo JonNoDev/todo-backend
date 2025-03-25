@@ -61,13 +61,12 @@ public class TodoService {
         return EditTodoResponse.builder().todoEdited(todoId).build();
     }
 
-    public DeleteTodoResponse deleteTodo(Long todoId) {
+    public void deleteTodo(Long todoId) {
         log.info("Deleting a todo with ID: {}", todoId);
         TodoItem todoItem = todoItemRepository.findById(todoId)
                 .orElseThrow(() -> new ResourceNotFoundException("No todo item with this ID can be found."));
         roleValidator.validateAdminOrUser(todoItem.getUserId().toString());
         todoItemRepository.deleteById(todoItem.getId());
-        return DeleteTodoResponse.builder().todoDeleted(todoId).build();
     }
 
     public RetrieveTodosResponse retrieveTodos() {

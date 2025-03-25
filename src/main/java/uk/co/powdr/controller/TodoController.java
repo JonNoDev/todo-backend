@@ -61,16 +61,17 @@ public class TodoController {
 
     @Operation(summary = "Delete an existing to-do item")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully deleted to-do item",
-                    content = @Content(schema = @Schema(implementation = DeleteTodoResponse.class))),
+            @ApiResponse(responseCode = "204", description = "Successfully deleted to-do item",
+                    content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "To-do item not found",
                     content = @Content)
     })
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<DeleteTodoResponse> deleteTodo(@PathVariable Long todoId) {
-        return ResponseEntity.ok(todoService.deleteTodo(todoId));
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long todoId) {
+        todoService.deleteTodo(todoId);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Retrieve existing to-do items")
