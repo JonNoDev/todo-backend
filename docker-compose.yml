@@ -1,0 +1,46 @@
+networks:
+  local:
+    name: local
+services:
+  todo-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: todo_backend
+    networks:
+      - local
+    ports:
+      - "8080:8080"
+    environment:
+      - TODO_SECRET=yh41vlFi3rIfwEXW9TXnjua8JYbJF6ZBp+3IDb+I88o3QMonDTjtbgwc6wvznd9sz4TP7v9Sd2XHmCaG1RvKOA==
+      - CORS_ORIGIN=localhost:3000, http://localhost:3000
+      - MYSQL_URL=jdbc:mysql://mysql_db:3306/todo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - MYSQL_USER=todo_user
+      - MYSQL_PASS=todo_pass
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
+    networks:
+      - local
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=todo
+      - MYSQL_USER=todo_user
+      - MYSQL_PASSWORD=todo_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "todo_user", "-ptodo_pass" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
