@@ -25,3 +25,4 @@ app:
   secret: ${TODO_SECRET}
   cors:
     origin: ${CORS_ORIGIN}
+  publicPaths: /actuator/health, /api/auth/**
