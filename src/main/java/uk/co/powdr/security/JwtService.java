@@ -24,12 +24,12 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${app.secret}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
-    public String generateToken(Map<String, Object> extraClaims, String userId) {
+    public String generateToken(Map<String, Object> extraClaims, Long userId) {
         return Jwts.builder()
                 .claims(extraClaims)
-                .subject(userId)
+                .subject(userId.toString())
                 .signWith(getSigningKey(), Jwts.SIG.HS512)
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plusSeconds(86400)))
