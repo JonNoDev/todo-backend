@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uk.co.powdr.dto.*;
+import uk.co.powdr.model.TodoItem;
 import uk.co.powdr.service.TodoService;
 
 @RestController
@@ -40,7 +41,7 @@ public class TodoController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
-    @PostMapping("/{userId}")
+    @PostMapping("/admin/{userId}")
     public ResponseEntity<AddTodoResponse> addTodo(@PathVariable Long userId, @RequestBody AddTodoRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.addTodo(userId, request));
     }
@@ -77,7 +78,7 @@ public class TodoController {
     @Operation(summary = "Retrieve existing to-do items")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved to-do items",
-                    content = @Content(schema = @Schema(implementation = AddTodoResponse.class))),
+                    content = @Content(schema = @Schema(implementation = RetrieveTodosResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
@@ -89,12 +90,24 @@ public class TodoController {
     @Operation(summary = "Retrieve existing to-do items as an admin")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved to-do items",
-                    content = @Content(schema = @Schema(implementation = AddTodoResponse.class))),
+                    content = @Content(schema = @Schema(implementation = RetrieveTodosResponse.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
-    @GetMapping("/{userId}")
+    @GetMapping("/admin/{userId}")
     public ResponseEntity<RetrieveTodosResponse> retrieveTodos(@PathVariable Long userId) {
         return ResponseEntity.ok(todoService.retrieveTodos(userId));
+    }
+
+    @Operation(summary = "Get a single existing to-do item")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved to-do item",
+                    content = @Content(schema = @Schema(implementation = TodoItem.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
+    @GetMapping("/{todoId}")
+    public ResponseEntity<TodoItem> retrieveTodo(@PathVariable Long todoId) {
+        return ResponseEntity.ok(todoService.retrieveTodo(todoId));
     }
 }

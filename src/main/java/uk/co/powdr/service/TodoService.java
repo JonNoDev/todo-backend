@@ -82,4 +82,12 @@ public class TodoService {
         List<TodoItem> todoItems = todoItemRepository.findAllByUserId(userId);
         return RetrieveTodosResponse.builder().todos(todoItems).build();
     }
+
+    public TodoItem retrieveTodo(Long todoId) {
+        log.info("Retrieving a todo: {}", todoId);
+        TodoItem todoItem = todoItemRepository.findById(todoId)
+                .orElseThrow(() -> new ResourceNotFoundException("No todo with this ID can be found."));
+        roleValidator.validateAdminOrUser(todoItem.getUserId().toString());
+        return todoItem;
+    }
 }
